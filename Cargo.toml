@@ -1,6 +1,6 @@
 [package]
 name = "myway-cli"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Gabriel Xavier <dotxavket@gmail.com>"]
 edition = "2021"
 description = "A minimalist project manager CLI to organize your ideas and stacks."
