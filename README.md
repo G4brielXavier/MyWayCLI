@@ -37,6 +37,7 @@ Created by **Gabriel Xavier**, My Way was born from the need to organize an "ove
 | `way` | Lists all active projects | `--uuid`, `--oneline`, `--complex` |
 | `edit` | Modify name, description or tags | `--uuid` or `--name` |
 | `version` | Manage project releases | `--add`, `--list` |
+| `status` | Manage project status | `--uuid`, `--name` |
 | `giveup` | Permanent delete (No graveyard) | `--uuid` or `--name` |
 | `graveyard` | Manage your archivees | `--add`, `--list`, `--exject` |
 | `finish` | Celebrate completion! | `--uuid` or `--name` |
@@ -44,14 +45,17 @@ Created by **Gabriel Xavier**, My Way was born from the need to organize an "ove
 ### 💡 Quick Examples
 
 ```bash
+# Adding a new project on WAY
+mw add
+
 # Adding a new version to a project
-myway version --add --name your-project-name
+mw version --add --name your-project-name
 
 # Looking for a specific project ID
-myway way --uuid 8271c6f
+mw way --uuid 8271c6f
 
 # The "Exhumation" Option (Clean the graveyard)
-myway graveyard --exject
+mw graveyard --exject
 ```
 
 ## 📂 Data Storage
@@ -63,8 +67,8 @@ MyWay is **zero-cloud** and private by default. Your data is stored locally in:
 
 ## 🚀 Future Roadmap (v0.2.0)
 
-- [ ] `myway sync`: Manual backup via Github Gist.
-- [ ] `myway open`: Quick-open project folder in your favorite editor (VSCode, Zed, NVim).
+- [ ] `mw sync`: Manual backup via Github Gist.
+- [ ] `mw open`: Quick-open project folder in your favorite editor (VSCode, Zed, NVim).
 
 
 ## 💻Installation

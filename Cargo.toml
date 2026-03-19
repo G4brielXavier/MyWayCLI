@@ -1,6 +1,6 @@
 [package]
 name = "myway-cli"
-version = "0.1.5"
+version = "0.1.6"
 authors = ["Gabriel Xavier <dotxavket@gmail.com>"]
 edition = "2021"
 description = "A minimalist project manager CLI to organize your ideas and stacks."
@@ -23,5 +23,5 @@ dirs = "5.0"
 
 
 [[bin]]
-name = "myway"
+name = "mw"
 path = "src/main.rs"

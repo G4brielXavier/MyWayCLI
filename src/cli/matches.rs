@@ -30,7 +30,7 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
         
         // Verify "myway create"
         // Create and Add a new project to way
-        Commands::Create => {
+        Commands::Add => {
 
             let mut uuid_project_val = teq_rng.rand_deep_string(3);
 
@@ -80,8 +80,8 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
             
             log.hey("");
             
-            let creating_msg = format!("Adding your project > \"{}\" to your WAY... ", proj_name);
-            let final_msg = format!("Now \"{}\" is on your WAY!", proj_name);
+            let creating_msg = format!("Adding your project \"{}\" to your WAY... ", proj_name.yellow().bold());
+            let final_msg = format!("Now \"{}\" is on your WAY!", proj_name.yellow().bold());
             
             log.hey_mw(&creating_msg);
             thread::sleep(Duration::from_millis(500));
@@ -192,11 +192,11 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
                         mission: proj_mission,
                         
                         versions: proj.versions.clone(),
-                        status: "new".to_string(),
+                        status: proj.status.clone(),
                         
                         time_created: proj.time_created.clone(),
     
-                        is_finish: false
+                        is_finish: proj.is_finish.clone()
                     };
     
                     if let Some(proj) = data.iter_mut().find(|s| s.uuid == my_project.uuid) {
@@ -377,46 +377,13 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
                         "W"
                     };
 
-                    log.hey_mw(&format!("({}) {} {} {}", is_finished.bold().yellow(), project.uuid.italic(), project.name.bold(), format!("[{}]", project.versions.last().expect("")).italic()));
+                    log.hey_mw(&format!("({} : {}) {} {} {}", is_finished.bold().yellow(), project.status.yellow().bold(), project.uuid.italic(), project.name.bold(), format!("[{}]", project.versions.last().expect("")).italic()));
 
                     if !*oneline {
-                        if *complex {
-
-                            println!("\t{}", project.description.italic());
-                            println!("\tStatus: {}", project.status.bold());
-                            println!("\tMission: \"{}\"", view_mission(&project.mission).italic().yellow());
-                            println!("\tCreated at: {}", project.time_created.italic());
-                            println!("\tStack(s):");
-                            if project.stack.len() != 0 {
-                                for i in project.stack.iter() {
-                                    println!("\t- {} ", i.bold())
-                                }
-                            } else {
-                                println!("\t  {}", "No Stack(s)".bold())
-                            }
-
-                        } else {
-                            
-                            println!("\t{}", project.description.italic());
-                            println!("\tStatus: {}", project.status.bold());
-                            println!("\tMission: \"{}\"", view_mission(&project.mission).italic().yellow());
-
-                        }
+                        if *complex { log.hey_project(project, true); } 
+                        else { log.hey_project(project, false); }
                     } else {
-                        if *complex {
-                            println!("\t{}", project.description.italic());
-                            println!("\tStatus: {}", project.status.bold());
-                            println!("\tMission: \"{}\"", view_mission(&project.mission).italic().yellow());
-                            println!("\tCreated at: {}", project.time_created.italic());
-                            println!("\tStack(s):");
-                            if project.stack.len() != 0 {
-                                for i in project.stack.iter() {
-                                    println!("\t- {} ", i.bold())
-                                }
-                            } else {
-                                println!("\t  {}", "No Stack(s)".bold())
-                            }
-                        }
+                        if *complex { log.hey_project(project, true); }
                     }
 
                     println!("");
@@ -842,7 +809,7 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
                             your_think: proj.your_think.clone(),
                             mission: proj.mission.clone(),
                             status: new_status,
-                            is_finish: true,
+                            is_finish: proj.is_finish.clone(),
                             time_created: proj.time_created.clone()
                         };
 

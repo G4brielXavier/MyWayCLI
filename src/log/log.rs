@@ -4,6 +4,8 @@ use std::{thread, time::Duration};
 use std::io::Write;
 use std::io;
 
+use crate::core::project::Project;
+use crate::core::project::view_mission;
 
 #[derive(Debug)]
 pub struct Log {}
@@ -14,6 +16,7 @@ pub trait LogF {
     fn hey(&self, msg: &str);
     fn hey_mw(&self, msg: &str);
     fn ascii_myway(&self);
+    fn hey_project(&self, project: &Project, complex: bool);
 
     fn _quest(&self, question: &str) -> String;
     fn quest_mandatory(&self, question: &str, default: &str) -> String;
@@ -30,6 +33,22 @@ impl LogF for Log {
 
     fn hey_mw(&self, msg: &str) {
         println!("{} {}", "[MW]".bright_purple(), msg.italic());
+    }
+
+    fn hey_project(&self, project: &Project, complex: bool) {
+        println!("\t{}", project.description.dimmed().italic());
+        println!("\tMission: \"{}\"", view_mission(&project.mission).italic().yellow());
+        if complex {
+            println!("\tCreated at: {}", project.time_created.italic());
+            println!("\tStack(s):");
+            if project.stack.len() != 0 {
+                for i in project.stack.iter() {
+                    println!("\t- {} ", i.bold())
+                }
+            } else {
+                println!("\t  {}", "No Stack(s)".bold())
+            }
+        }
     }
 
 

@@ -8,7 +8,7 @@ pub enum Commands {
 
 
     /// Add a new project to WAY
-    Create,
+    Add,
 
 
     /// Show all existent projects on WAY
