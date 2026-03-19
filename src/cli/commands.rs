@@ -7,11 +7,11 @@ pub enum Commands {
     Hey,
 
 
-    /// Creates a new project and add to WAY
+    /// Add a new project to WAY
     Create,
 
 
-    /// Show all projects added on WAY
+    /// Show all existent projects on WAY
     Way {
         #[arg(short, long)]
         oneline: bool,
@@ -27,7 +27,7 @@ pub enum Commands {
     },
 
 
-    /// Remove a project from WAY
+    /// Remove an existent project from WAY
     Giveup {
 
         #[arg(short, long)]
@@ -39,7 +39,7 @@ pub enum Commands {
     },
 
 
-    /// Define a project as "Done" by UUID
+    /// Define a project as "F"(Finish)
     Finish {
 
         #[arg(short, long)]
@@ -51,7 +51,7 @@ pub enum Commands {
     },
 
 
-    /// Edit an existent project by UUID
+    /// Edit an existent project
     Edit {
 
         #[arg(short, long)]
@@ -63,7 +63,7 @@ pub enum Commands {
     },
     
 
-
+    /// Edit a project's status to custom status (as 'stable', 'deprecated', ...)
     Status {
         
         #[arg(short, long)]
@@ -75,8 +75,7 @@ pub enum Commands {
     },
 
 
-    
-
+    /// List and Add versions to an existent project
     Version {
 
         #[arg(short, long)]
@@ -95,11 +94,11 @@ pub enum Commands {
 
 
 
-    /// Show a report of all stacks users
+    /// List all stacks that is used in all project
     Stacks,
 
 
-
+    /// An danger area to 'kill' (archive) an existent project
     Graveyard {
 
         #[arg(short, long)]
@@ -120,7 +119,7 @@ pub enum Commands {
     },
 
 
-
-    List,
+    /// Filter all project as 'Latest', 'Newest', 'Finished' or 'Specific Stack'
+    Filter,
 
 }

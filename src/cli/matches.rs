@@ -385,29 +385,21 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
                             println!("\t{}", project.description.italic());
                             println!("\tStatus: {}", project.status.bold());
                             println!("\tMission: \"{}\"", view_mission(&project.mission).italic().yellow());
+                            println!("\tCreated at: {}", project.time_created.italic());
                             println!("\tStack(s):");
                             if project.stack.len() != 0 {
                                 for i in project.stack.iter() {
                                     println!("\t- {} ", i.bold())
                                 }
                             } else {
-                                println!("\t {}", "No Stack(s)".bold())
+                                println!("\t  {}", "No Stack(s)".bold())
                             }
-                            println!("\tCreated at: {}", project.time_created.italic());
 
                         } else {
                             
                             println!("\t{}", project.description.italic());
                             println!("\tStatus: {}", project.status.bold());
                             println!("\tMission: \"{}\"", view_mission(&project.mission).italic().yellow());
-                            println!("\tStack(s):");
-                            if project.stack.len() != 0 {
-                                for i in project.stack.iter() {
-                                    println!("\t- {} ", i.bold())
-                                }
-                            } else {
-                                println!("\t {}", "No Stack(s)".bold())
-                            }
 
                         }
                     } else {
@@ -415,15 +407,15 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
                             println!("\t{}", project.description.italic());
                             println!("\tStatus: {}", project.status.bold());
                             println!("\tMission: \"{}\"", view_mission(&project.mission).italic().yellow());
+                            println!("\tCreated at: {}", project.time_created.italic());
                             println!("\tStack(s):");
                             if project.stack.len() != 0 {
                                 for i in project.stack.iter() {
                                     println!("\t- {} ", i.bold())
                                 }
                             } else {
-                                println!("\t {}", "No Stack(s)".bold())
+                                println!("\t  {}", "No Stack(s)".bold())
                             }
-                            println!("\tCreated at: {}", project.time_created.italic());
                         }
                     }
 
@@ -647,8 +639,7 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
 
                         if proj_version_new.is_empty() {
                             log.hey("");
-                            log.hey_mw("Your input is empty");
-                            std::process::exit(1)
+                            return Err(MyWayError::InvalidInput("Your input is empty".to_string()));
                         }
 
                         if proj.versions.iter().any(|v| *v == *proj_version_new) {
@@ -809,6 +800,77 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
             Ok(())
 
         }
+
+
+
+
+        Commands::Status { uuid, name } => {
+
+            log.hey_mw(&format!("{}", "On Way!"));
+            log.hey("");
+
+            let mut target_uuid = None;
+
+            if let Some(uuid) = uuid {
+                target_uuid = data.iter().find(|p| p.uuid == *uuid).map(|p| p.uuid.clone());
+            }
+
+            if let Some(name) = name {
+                target_uuid = data.iter().find(|p| p.name == *name).map(|p| p.uuid.clone());
+            }
+
+
+            if let Some(uuid) = target_uuid {
+
+                if let Some(proj) = data.iter().find(|p| p.uuid == *uuid) {
+
+                    log.hey_mw(&format!("{}'s current status is {}", proj.name, proj.status.bold()));
+                    println!("");
+
+                    let new_status = log.quest_mandatory("New Status", "stable").trim().to_string().to_lowercase();
+
+                    if !new_status.is_empty() {
+
+                        log.hey_mw(&format!("{}'s status is {} now!", proj.name, new_status.bold().yellow()));
+                        
+                        let my_project: Project = Project {
+                            uuid: proj.uuid.clone(),
+                            name: proj.name.clone(),
+                            description: proj.description.clone(),
+                            stack: proj.stack.clone(),
+                            versions: proj.versions.clone(),
+                            your_think: proj.your_think.clone(),
+                            mission: proj.mission.clone(),
+                            status: new_status,
+                            is_finish: true,
+                            time_created: proj.time_created.clone()
+                        };
+
+
+                        if let Some(proj) = data.iter_mut().find(|p| p.uuid == my_project.uuid) {
+                            *proj = my_project;
+                        }
+
+                        let _ = files.write(&data);
+
+                        Ok(())
+
+                    } else {
+                        log.hey("");
+                        Err(MyWayError::InvalidInput("Your input is empty".to_string()))
+                    }
+
+                } else {
+                    Err(MyWayError::ProjectNotFound("Project not exist or not found.".to_string()))
+                }
+
+            } else {
+                log.hey_mw("Use '--uuid' or '--name'");
+                Err(MyWayError::InvalidInput("You don't provided a identifier as uuid or name.".to_string()))
+            }
+
+        }
+
 
 
 
