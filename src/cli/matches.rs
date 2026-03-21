@@ -48,6 +48,10 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
             
             let mut proj_name = log.quest_mandatory("project_name", &proj_name_def);
 
+            if proj_name.len() > 12 {
+                return Err(MyWayError::StringLengthLimitExceeded("project_name: <=12 limit length".to_string()))
+            }
+
             if proj_name.contains(char::is_whitespace) {
                 let old_name = proj_name.clone();
                 proj_name = proj_name.replace(" ", "-");
@@ -61,13 +65,27 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
 
             let proj_description: String = log.quest_mandatory("description", "It's my project");
 
+            if proj_description.len() > 24 {
+                return Err(MyWayError::StringLengthLimitExceeded("description: <=24 8limit length".to_string()))
+            }
+            
             log.hey("");
-            log.hey_mw("Tip: Use \"SemVer\" as '0.1.0'");
-            let proj_version: String = log.quest_mandatory("version", "0.1.0");
+            log.hey_mw(&format!("{} Use \"SemVer\" as '0.1.0'. No spaces.", "Recommended:".yellow()));
+            let mut proj_version: String = log.quest_mandatory("version", "0.1.0");
+
+            if proj_version.len() > 8 {
+                return Err(MyWayError::StringLengthLimitExceeded("version: <=8 limit length".to_string()))
+            }
+
+            if proj_version.contains(char::is_whitespace) {
+                let old_name = proj_version.clone();
+                proj_version = proj_version.replace(" ", ".");
+                log.hey_mw(&format!("\"{}\" converted to \"{}\"", old_name, &proj_version));
+            }
 
             log.hey("");
-            log.hey_mw("Stack is what you are using to creating your project.");
-            log.hey_mw("Syntax Example: [react-ts, zustand, node, express]");
+            log.hey_mw(&format!("{}", "Stack is what you are using to creating your project.".dimmed()));
+            log.hey_mw(&format!("{} [react-ts, zustand, node, express]", "Example:".yellow()));
             let proj_stack: String = log.quest_mandatory("stack/tools", "[]");
             
             let clean_input = proj_stack.trim_matches(|c| c == '[' || c == ']');            
@@ -75,12 +93,11 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
             let res: Vec<String> = clean_input.split(",").map(|s| s.trim().to_string()).filter(|s| !s.is_empty()).collect();
 
             log.hey("");
-            log.hey_mw("Tip: \"IDK\" means \"I don't Know\".");
-            let proj_mission: String = log.quest_option("YOU WILL FINISH THAT? [Y|idk|n]", vec!["Y", "idk", "n"], "Y");
+            let proj_mission: String = log.quest_option("YOU WILL FINISH THAT? [Y|n]", vec!["Y", "n"], "Y");
             
             log.hey("");
             
-            let creating_msg = format!("Adding your project \"{}\" to your WAY... ", proj_name.yellow().bold());
+            let creating_msg = format!("Adding \"{}\" to your WAY... ", proj_name.yellow().bold());
             let final_msg = format!("Now \"{}\" is on your WAY!", proj_name.yellow().bold());
             
             log.hey_mw(&creating_msg);
@@ -110,7 +127,7 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
             };
 
             data.push(my_project);
-            files.write(&data).expect("Not possible to save data");
+            files.write(&data)?;
 
             Ok(())
 
@@ -144,8 +161,14 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
                     
                     let mut proj_name = log.quest_mandatory("project_name", &proj.name);
     
+                    if proj_name.len() > 12 {
+                        return Err(MyWayError::StringLengthLimitExceeded("project_name: <=12 limit length".to_string()))
+                    }
+
                     if proj_name.contains(char::is_whitespace) {
+                        let old_name = proj_name.clone();
                         proj_name = proj_name.replace(" ", "-");
+                        log.hey_mw(&format!("\"{}\" converted to \"{}\"", old_name, &proj_name));
                     }
     
                     // if data.iter().any(|p| p.name == proj_name) {
@@ -156,9 +179,13 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
     
                     let proj_description: String = log.quest_mandatory("description", &proj.description);
     
+                    if proj_description.len() > 24 {
+                        return Err(MyWayError::StringLengthLimitExceeded("description: <=24 8limit length".to_string()))
+                    }
+
                     log.hey("");
-                    log.hey_mw("Stack is what you are using to creating your project.");
-                    log.hey_mw("Syntax Example: [react-ts, zustand, node, express]");
+                    log.hey_mw(&format!("{}", "Stack is what you are using to creating your project.".dimmed()));
+                    log.hey_mw(&format!("{} [react-ts, zustand, node, express]", "Example:".yellow()));
     
                     let display_stacks = format!("[{}]", proj.stack.join(", "));        
                     let proj_stack: String = log.quest_mandatory("stack/tools", &display_stacks);
@@ -167,14 +194,13 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
                     let res: Vec<String> = clean_input.split(",").map(|s| s.trim().to_string()).filter(|s| !s.is_empty()).collect();
     
                     log.hey("");
-                    log.hey_mw("Tip: \"IDK\" means \"I don't Know\".");
-                    let proj_mission: String = log.quest_option("YOU WILL FINISH THAT? [Y|idk|n]", vec!["Y", "idk", "n"], &proj.mission);
+                    let proj_mission: String = log.quest_option("YOU WILL FINISH THAT? [Y|n]", vec!["Y", "n"], &proj.mission);
                     
                     log.hey("");
                     
-                    log.hey_mw("Editted with successfully!");
-                    let creating_msg = format!("Updating your WAY... ");
-                    let final_msg = format!("Now \"{}\" is updated on your WAY!", proj_name);
+                    log.hey_mw(&format!("{}", "Editted with successfully!".yellow()));
+                    let creating_msg = format!("{}", "Updating your WAY... ".dimmed());
+                    let final_msg = format!("Now {} is updated on your WAY!", proj_name);
                     
                     log.hey_mw(&creating_msg);
                     thread::sleep(Duration::from_millis(500));
@@ -203,7 +229,7 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
                         *proj = my_project;
                     }
     
-                    files.write(data).expect("Not possible to save data");
+                    files.write(data)?;
 
                     Ok(())
 
@@ -213,8 +239,8 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
                 }
                 
             } else {
-                log.hey_mw("Use '--uuid' or '--name'");
-                Err(MyWayError::InvalidInput("You don't provided a identifier as uuid or name.".to_string()))
+                log.hey_mw(&format!("{} Use '--uuid' or '--name' and verify if the project exist.", "Tip:".yellow()));
+                return Err(MyWayError::InvalidInput("You don't provided a identifier or the project not exist".to_string()))
             }
 
 
@@ -223,11 +249,9 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
 
         // Verify "myway way"
         // List all projects on way
-        Commands::Way { oneline, complex, uuid, name } => {
+        Commands::Way { oneline, complex, uuid, name, finish, working, status } => {
             
             log.hey_mw(&format!("{}", "Walking on WAY..."));
-            log.hey_mw(&format!("{} project(s) found", data.len()));
-            log.hey(&format!("{}", ">-----------------------------".dimmed()));
             log.hey("");
 
             if let Some(id) = uuid {
@@ -369,7 +393,28 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
 
             } else {
 
-                for project in data.iter() {
+                let mut project_way = data.clone();
+
+                if let Some(status) = status {
+
+                    project_way = project_way.iter().filter(|p| p.status == *status).cloned().collect();
+
+                } else {
+
+                    if *finish {
+                        project_way = project_way.iter().filter(|p| p.is_finish == true).cloned().collect();
+                    }
+
+                    if *working {
+                        project_way = project_way.iter().filter(|p| p.is_finish == false).cloned().collect();
+                    }
+
+                }
+
+                log.hey_mw(&format!("{} project(s) found", project_way.len()));
+                log.hey(&format!("{}", ">-----------------------------".dimmed()));
+
+                for project in project_way.iter() {
 
                     let is_finished = if project.is_finish {
                         "F"
@@ -451,8 +496,8 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
                 }
 
             } else {
-                log.hey_mw("Use '--uuid' or '--name'");
-                Err(MyWayError::InvalidInput("You don't provided a identifier as uuid or name.".to_string()))
+                log.hey_mw(&format!("{} Use '--uuid' or '--name' and verify if the project exist.", "Tip:".yellow()));
+                return Err(MyWayError::InvalidInput("You don't provided a identifier or the project not exist".to_string()))
             }
         
         }
@@ -520,8 +565,8 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
                 }
 
             } else {
-                log.hey_mw("Use '--uuid' or '--name'");
-                Err(MyWayError::InvalidInput("You don't provided a identifier as uuid or name.".to_string()))
+                log.hey_mw(&format!("{} Use '--uuid' or '--name' and verify if the project exist.", "Tip:".yellow()));
+                return Err(MyWayError::InvalidInput("You don't provided a identifier or the project not exist".to_string()))
             }
 
         }
@@ -609,6 +654,10 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
                             return Err(MyWayError::InvalidInput("Your input is empty".to_string()));
                         }
 
+                        if proj_version_new.len() > 8 {
+                            return Err(MyWayError::StringLengthLimitExceeded("version: <=8 limit length".to_string()))
+                        }
+
                         if proj.versions.iter().any(|v| *v == *proj_version_new) {
                             log.hey("");
                             return Err(MyWayError::VersionAlreadyExists(format!("\"{}\" already exists a version.", proj_version_new)))
@@ -628,8 +677,8 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
                     }
 
                 } else {
-                    log.hey_mw("Use '--uuid' or '--name'");
-                    return Err(MyWayError::InvalidInput("You don't provided a identifier as uuid or name.".to_string()));
+                    log.hey_mw(&format!("{} Use '--uuid' or '--name' and verify if the project exist.", "Tip:".yellow()));
+                    return Err(MyWayError::InvalidInput("You don't provided a identifier or the project not exist".to_string()))
                 }
 
             }
@@ -659,8 +708,8 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
                     }
 
                 } else {
-                    log.hey_mw("Use '--uuid' or '--name'");
-                    return Err(MyWayError::InvalidInput("You don't provided a identifier as uuid or name.".to_string()));
+                    log.hey_mw(&format!("{} Use '--uuid' or '--name' and verify if the project exist.", "Tip:".yellow()));
+                    return Err(MyWayError::InvalidInput("You don't provided a identifier or the project not exist".to_string()))
                 }
 
             }
@@ -672,10 +721,9 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
 
 
 
-        Commands::Graveyard { uuid, name, list, kill, exject } => {
+        Commands::Yard { uuid, name, list, kill, exject } => {
 
             log.hey_mw(&format!("{}", "On Graveyard!".red().bold()));
-            log.hey_mw(&format!("{}", "Any change here will never be returned".red()));
             log.hey("");
             
             let mut target_uuid = None;
@@ -706,10 +754,12 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
 
                         if want == "Y" {
 
-                            log.hey_mw(&format!("\"{}\" Killed!", format!("{}", proj.name)).red());
+                            log.hey_mw(&format!("{} is dead!", proj.name.red()));
                             data.retain(|p| p.uuid != &*proj.uuid);
                             graveyard.push(proj);
-                            let _ = files.write_graveyard(&graveyard);
+
+                            files.write(&data)?;
+                            files.write_graveyard(&graveyard)?;
 
                         } else {
                             log.hey_mw("Aborted. Project is still alive.");
@@ -730,12 +780,12 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
 
             if *list {
 
-                log.hey_mw(&format!("{} project(s) found", graveyard.len()));
-                log.hey(">-------------------------------------------------------------------");
+                log.hey_mw(&format!("{} grave(s) found", graveyard.len()));
+                log.hey(&format!("{}", ">-------------------------------------------------------------------".dimmed()));
                 log.hey("");
                 
                 for proj in graveyard.iter() {
-                    println!("- {} {}", proj.name, proj.versions.last().expect(""))
+                    println!("- {} {} {}", proj.uuid.italic(), proj.name.bold(), format!("[{}]", proj.versions.last().expect("")).italic())
                 }
                 
                 log.hey("");
@@ -766,6 +816,65 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
 
             Ok(())
 
+        }
+
+
+
+
+        Commands::Reviv { uuid, name } => {
+
+            log.hey_mw(&format!("{}", "On the other S1d3!".purple()));
+            log.hey("");
+
+            let mut target_uuid = None;
+
+            if let Some(uuid) = uuid {
+                target_uuid = graveyard.iter().find(|p| p.uuid == *uuid).map(|p| p.uuid.clone());
+            }
+
+            if let Some(name) = name {
+                target_uuid = graveyard.iter().find(|p| p.name == *name).map(|p| p.uuid.clone());
+            }
+
+
+            if let Some(uuid) = target_uuid {
+
+                if let Some(proj) = graveyard.iter().find(|p| p.uuid == *uuid).cloned() {
+
+                    log.hey_mw(&format!("{}", "You're about to REVIVE a project from Graveyard.".dimmed().yellow()));
+                    println!("");
+
+
+                    let want = log.quest_option(&format!("REVIVE {}? [Y/n]", proj.name.yellow()), vec!["Y", "n"], "n").trim().to_string();
+
+                    if want.is_empty() {
+                        return Err(MyWayError::InvalidInput("Input is Empty".to_string()))
+                    } 
+
+                    if want == "Y" {
+
+                        log.hey_mw(&format!("{} was revived!", proj.name.yellow()));
+                        graveyard.retain(|p| p.uuid != &*proj.uuid);
+                        data.push(proj);
+
+                        files.write(&data)?;
+                        files.write_graveyard(&graveyard)?;
+
+                    } else {
+                        log.hey_mw("Aborted. Project is still dead.");
+                    }
+
+
+                    Ok(())
+
+                } else {
+                    Err(MyWayError::ProjectNotFound("Project not found in GRAVEYARD".to_string()))
+                }
+
+            } else {
+                log.hey_mw(&format!("{} Use '--uuid' or '--name' and verify if the project exist.", "Tip:".yellow()));
+                Err(MyWayError::InvalidInput("You don't provided a identifier or the project not exist".to_string()))
+            }
         }
 
 
@@ -841,11 +950,94 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
 
 
 
+        Commands::Ord { uuid, name, first, last, swap } => {
 
+            log.hey_mw(&format!("{}", "On Way!"));
+            log.hey("");
 
-        _ => {
-            Ok(())
+            let mut target_uuid = None;
+
+            if let Some(uuid) = uuid {
+                target_uuid = data.iter().find(|p| p.uuid == *uuid).map(|p| p.uuid.clone());
+            }
+
+            if let Some(name) = name {
+                target_uuid = data.iter().find(|p| p.name == *name).map(|p| p.uuid.clone());
+            }
+
+            if let Some(uuid) = target_uuid {
+
+                if let Some(proj) = data.iter().find(|p| p.uuid == *uuid) {
+
+                    let proj_name = proj.name.clone();
+
+                    let project_index = data.iter().position(|p| p == proj).ok_or_else(|| {
+                        MyWayError::WayLengthExceeded("".to_string())
+                    })?;
+                    
+                    if let Some(name) = swap {
+
+                        let other_project = data.iter().find(|p| p.name == *name).ok_or_else(|| {
+                            MyWayError::ProjectNotFound("".to_string())
+                        })?;
+
+                        let other_project_index = data.iter().position(|p| p == other_project).ok_or_else(|| {
+                            MyWayError::ProjectNotFound("".to_string())
+                        })?;
+
+                        if other_project_index < data.len() {
+
+                            log.hey_mw(&format!("{} and {} were swapped", proj_name.yellow(), other_project.name.yellow()));
+                            data.swap(project_index, other_project_index);
+                            files.write(&data)?;
+
+                        } else {
+                            return Err(MyWayError::WayLengthExceeded(format!("{} is more than {}", other_project_index, data.len())))
+                        }
+
+                    } else {
+
+                        if *first {
+
+                            if project_index < data.len() {
+
+                                log.hey_mw(&format!("Now, {} is in FIRST place!", proj_name.yellow()));
+
+                                let it = data.remove(project_index);
+                                data.insert(0, it);
+                                files.write(&data)?;
+                            }
+                            
+                        }
+                        
+                        if *last {
+                            
+                            if project_index < data.len() {
+
+                                log.hey_mw(&format!("Now, {} is in last place!", proj_name.yellow()));
+
+                                let it = data.remove(project_index);
+                                data.insert(data.len(), it);
+                                files.write(&data)?;
+                            }
+
+                        }
+
+                    }
+
+                    Ok(())
+
+                } else {
+                    Err(MyWayError::ProjectNotFound("Project not exist or not found.".to_string()))
+                }
+
+            } else {
+                log.hey_mw("Use '--uuid' or '--name'");
+                Err(MyWayError::InvalidInput("You don't provided a identifier as uuid or name.".to_string()))
+            }
+
         }
+
 
     }
 

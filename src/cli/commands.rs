@@ -11,8 +11,9 @@ pub enum Commands {
     Add,
 
 
-    /// Show all existent projects on WAY
+    /// Show all existent projects on WAY, you can filter by stage (`F` & `W`) or status`
     Way {
+
         #[arg(short, long)]
         oneline: bool,
 
@@ -23,7 +24,17 @@ pub enum Commands {
         uuid: Option<String>,
 
         #[arg(short, long)]
-        name: Option<String>
+        name: Option<String>,
+
+        #[arg(short, long)]
+        finish: bool,
+
+        #[arg(short, long)]
+        working: bool,
+
+        #[arg(short, long)]
+        status: Option<String>
+
     },
 
 
@@ -39,7 +50,7 @@ pub enum Commands {
     },
 
 
-    /// Define a project as "F"(Finish)
+    /// Define a project as `F` (Finish)
     Finish {
 
         #[arg(short, long)]
@@ -98,8 +109,10 @@ pub enum Commands {
     Stacks,
 
 
-    /// An danger area to 'kill' (archive) an existent project
-    Graveyard {
+
+
+    /// An danger area to 'kill' (archive) an existent project,
+    Yard {
 
         #[arg(short, long)]
         uuid: Option<String>,
@@ -114,12 +127,39 @@ pub enum Commands {
         kill: bool,
 
         #[arg(short, long)]
-        exject: bool
-    
+        exject: bool,
+
     },
 
+    // Revive a specific project from Graveyard with your uuid
+    Reviv {
+        
+        #[arg(short, long)]
+        uuid: Option<String>,
 
-    /// Filter all project as 'Latest', 'Newest', 'Finished' or 'Specific Stack'
-    Filter,
+        #[arg(short, long)]
+        name: Option<String>,
+
+    },
+    
+    /// Ordenate your projects, putting on first or last and swapping two projects
+    Ord {
+
+        #[arg(short, long)]
+        uuid: Option<String>,
+
+        #[arg(short, long)]
+        name: Option<String>,
+
+        #[arg(short, long)]
+        first: bool,
+        
+        #[arg(short, long)]
+        last: bool,
+
+        #[arg(short, long)]
+        swap: Option<String>
+
+    },
 
 }

@@ -136,5 +136,6 @@ impl LogF for Log {
         println!("{}", credits_ascii.italic());
         println!();
         println!("{}: {}", "Developed by".italic(), "Gabriel \"dotxav\" Xavier".bold());
+        println!("{}: {}", "Security & Encryption by ".italic(), "Tequel v0.4.5".bold());
     }
 }

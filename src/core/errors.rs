@@ -6,8 +6,10 @@ pub enum MyWayError {
     VersionAlreadyExists(String),
     ProjectAlreadyExists(String),
     InvalidInput(String),
+    StringLengthLimitExceeded(String),
     IoError(std::io::Error),
-    StacksIsEmpty(String)
+    StacksIsEmpty(String),
+    WayLengthExceeded(String)
 }
 
 impl fmt::Display for MyWayError {
@@ -19,6 +21,8 @@ impl fmt::Display for MyWayError {
             MyWayError::ProjectAlreadyExists(e) => write!(f, "Project already exist: {}", e),
             MyWayError::VersionAlreadyExists(e) => write!(f, "Version already exist: {}", e),
             MyWayError::StacksIsEmpty(e) => write!(f, "Stack list is empty: {}", e),
+            MyWayError::WayLengthExceeded(e) => write!(f, "Stack list length exceeded: {}", e),
+            MyWayError::StringLengthLimitExceeded(e) => write!(f, "String length limit exceeded: {}", e),
         }
     }
 }

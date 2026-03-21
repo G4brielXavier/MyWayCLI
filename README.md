@@ -16,7 +16,7 @@
   - [🛠️ Commands \& Usage](#️-commands--usage)
     - [💡 Quick Examples](#-quick-examples)
   - [📂 Data Storage](#-data-storage)
-  - [🚀 Future Roadmap (v0.2.0)](#-future-roadmap-v020)
+  - [🚀 Future Roadmap (v0.2.5)](#-future-roadmap-v025)
   - [💻Installation](#installation)
   - [📄 License](#-license)
 
@@ -34,12 +34,14 @@ Created by **Gabriel Xavier**, My Way was born from the need to organize an "ove
 | Command | Action | Key Flags |
 | :--- | :--- | :--- |
 | `add` | Spawns a new project | -- |
-| `way` | Lists all active projects | `--uuid`, `--oneline`, `--complex` |
+| `way` | Lists all active projects | `--uuid`, `--oneline`, `--complex`, `--finish`, `--working`, `--status` |
 | `edit` | Modify name, description or tags | `--uuid` or `--name` |
+| `ord` | Ordenate Projects in WAY | `--uuid`, `--name`, `--first`, `--last`, `--swap` |
 | `version` | Manage project releases | `--add`, `--list` |
 | `status` | Manage project status | `--uuid`, `--name` |
 | `giveup` | Permanent delete (No graveyard) | `--uuid` or `--name` |
-| `graveyard` | Manage your archivees | `--add`, `--list`, `--exject` |
+| `yard` | Manage your archives | `--add`, `--list`, `--exject` |
+| `reviv` | Remove a specific archivaded project | `--uuid` or `--name` |
 | `finish` | Celebrate completion! | `--uuid` or `--name` |
 
 ### 💡 Quick Examples
@@ -55,7 +57,7 @@ mw version --add --name your-project-name
 mw way --uuid 8271c6f
 
 # The "Exhumation" Option (Clean the graveyard)
-mw graveyard --exject
+mw yard --exject
 ```
 
 ## 📂 Data Storage
@@ -65,10 +67,9 @@ MyWay is **zero-cloud** and private by default. Your data is stored locally in:
 - Windows: `%USERPROFILE%\Documents\MyWayCli`
 - Linux/macOS: `~/Documents/MyWayCli`
 
-## 🚀 Future Roadmap (v0.2.0)
+## 🚀 Future Roadmap (v0.2.5)
 
-- [ ] `mw sync`: Manual backup via Github Gist.
-- [ ] `mw open`: Quick-open project folder in your favorite editor (VSCode, Zed, NVim).
+Planning...
 
 
 ## 💻Installation
