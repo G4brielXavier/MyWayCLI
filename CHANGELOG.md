@@ -79,3 +79,8 @@
 - Added Latest Release Verifier (`crates.io` API)
 - Some improvements
 - Bugs fixes
+
+## myway-cli v0.3.4
+
+- New Parameter to `mw hey`:
+  - `--update`: Verify if `myway` is updated

@@ -4,7 +4,10 @@ use clap::Subcommand;
 pub enum Commands {
 
     /// Show informations about MYWAY
-    Hey,
+    Hey {
+        #[arg(short, long)]
+        update: bool
+    },
 
 
     /// Add a new project to WAY

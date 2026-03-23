@@ -16,8 +16,7 @@
   - [🛠️ Commands \& Usage](#️-commands--usage)
     - [💡 Quick Examples](#-quick-examples)
   - [📂 Data Storage](#-data-storage)
-  - [🚀 Future Roadmap (v0.2.5)](#-future-roadmap-v025)
-  - [💻Installation](#installation)
+  - [�Installation](#installation)
   - [📄 License](#-license)
 
 
@@ -68,10 +67,6 @@ MyWay is **zero-cloud** and private by default. Your data is stored locally in:
 - Linux/macOS: `~/.local/share/myway`
 
 The files are `.tql` because the data is *encrypted* with `tequel-rs` (`TequelEncrypt`) 
-
-## 🚀 Future Roadmap (v0.2.5)
-
-Planning...
 
 
 ## 💻Installation
