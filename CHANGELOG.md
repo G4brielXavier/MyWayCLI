@@ -74,4 +74,8 @@
   - Description: <=35
   - Project's Name: <=20
 
+## myway-cli v0.3.3
 
+- Added Latest Release Verifier (`crates.io` API)
+- Some improvements
+- Bugs fixes

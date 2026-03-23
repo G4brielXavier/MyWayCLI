@@ -15,6 +15,39 @@ use chrono::{ Local };
 use colored::Colorize;
 use tequel_rs::rng::TequelRng;
 
+use semver::Version;
+use reqwest::header::USER_AGENT;
+
+pub fn check_for_updates(log: &Log) -> Option<String> {
+    let current_version = env!("CARGO_PKG_VERSION");
+    let url = "https://crates.io/api/v1/crates/myway-cli";
+
+    let client = reqwest::blocking::Client::new();
+    let response = client
+        .get(url)
+        .header(USER_AGENT, "myway-cli-updater (contact: dotxavket@gmail.com)")
+        .send()
+        .ok()?;
+
+    let json : serde_json::Value = response.json().ok()?;
+
+    if let Some(latest_version_str) = json["crate"]["max_version"].as_str() {
+        let current = Version::parse(current_version).ok()?;
+        let latest = Version::parse(latest_version_str).ok()?;
+
+        if latest > current {
+            log.hey_mw(&format!("Hey! This MyWay is deprecated, update now!"));
+            log.hey_mw(&format!("{} -> {}", current, latest));
+            log.hey_mw("Use: cargo install myway-cli");
+        }
+    }
+
+    None
+
+}
+
+
+
 pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut ProjectList, graveyard: &mut GraveyardList) -> Result<(), MyWayError> {
 
     let teq_rng: TequelRng = TequelRng::new();
@@ -31,6 +64,8 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
         // Verify "myway create"
         // Create and Add a new project to way
         Commands::Add => {
+
+            check_for_updates(&log);
 
             let mut uuid_project_val = teq_rng.rand_deep_string(3);
 
@@ -138,6 +173,8 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
         // Verify "myway edit --uuid --name"
         // Create and Add a new project to way
         Commands::Edit { uuid, name  } => {
+
+            check_for_updates(&log);
 
             log.hey_mw(&format!("{}", "On Way!"));
             log.hey("");
@@ -253,6 +290,8 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
         // List all projects on way
         Commands::Way { oneline, complex, uuid, name, finish, working, status } => {
             
+            check_for_updates(&log);
+
             log.hey_mw(&format!("{}", "Walking on WAY..."));
             log.hey("");
 
@@ -448,6 +487,8 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
         // Remove a project from WAY
         Commands::Giveup { uuid, name } => {
 
+            check_for_updates(&log);
+
             log.hey_mw(&format!("{}", "On Way!"));
             log.hey("");
 
@@ -512,6 +553,8 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
         // Verify "myway finish"
         // Mark a project as FINISHED!
         Commands::Finish { uuid, name } => {
+
+            check_for_updates(&log);
 
             log.hey_mw(&format!("{}", "On Way!"));
             log.hey("");
@@ -583,6 +626,8 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
         // Verify "myway stacks"
         Commands::Stacks => {
 
+            check_for_updates(&log);
+
             log.hey_mw("Searching all Stacks...");
             log.hey(&format!("{}", ">-----------------------------".dimmed()));
 
@@ -628,6 +673,8 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
 
         Commands::Version { uuid, name, list, add } => {
 
+            check_for_updates(&log);
+            
             log.hey_mw(&format!("{}", "On Way!"));
             log.hey("");
             log.hey(&format!("{}", ">-----------------------------".dimmed()));
@@ -731,6 +778,8 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
 
         Commands::Yard { uuid, name, list, kill, exject } => {
 
+            check_for_updates(&log);
+            
             log.hey_mw(&format!("{}", "On Graveyard!".red().bold()));
             log.hey("");
             
@@ -831,6 +880,8 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
 
         Commands::Reviv { uuid, name } => {
 
+            check_for_updates(&log);
+
             log.hey_mw(&format!("{}", "On the other S1d3!".purple()));
             log.hey("");
             log.hey(&format!("{}", ">-----------------------------".dimmed()));
@@ -891,6 +942,9 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
 
         Commands::Status { uuid, name } => {
 
+            check_for_updates(&log);
+
+            
             log.hey_mw(&format!("{}", "On Way!"));
             log.hey("");
             log.hey(&format!("{}", ">-----------------------------".dimmed()));
@@ -961,6 +1015,8 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Pro
 
 
         Commands::Ord { uuid, name, first, last, swap } => {
+
+            check_for_updates(&log);
 
             log.hey_mw(&format!("{}", "On Way!"));
             log.hey("");
