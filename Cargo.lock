@@ -771,6 +771,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f8ca58f447f06ed17d5fc4043ce1b10dd205e060fb3ce5b979b8ed8e59ff3f79"
 
 [[package]]
+name = "memmap2"
+version = "0.9.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "714098028fe011992e1c3962653c96b2d578c4b4bce9036e15ff220319b1e0e3"
+dependencies = [
+ "libc",
+]
+
+[[package]]
 name = "mime"
 version = "0.3.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -789,13 +798,14 @@ dependencies = [
 
 [[package]]
 name = "myway-cli"
-version = "0.3.4"
+version = "0.3.5"
 dependencies = [
  "chrono",
  "clap",
  "colored",
  "dirs",
  "indexmap",
+ "memmap2",
  "regex",
  "reqwest",
  "semver",
@@ -1295,9 +1305,9 @@ dependencies = [
 
 [[package]]
 name = "tequel-rs"
-version = "0.5.9"
+version = "0.7.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "314d301083c037606a53051c4e168038ad1522e04e5a01298347b3c43ed78e65"
+checksum = "a262e74cf9ca234e95ec4b541a056eeb8c0ca2fed67e15c07e8339fb1393b5cb"
 dependencies = [
  "getrandom 0.2.17",
  "hex",

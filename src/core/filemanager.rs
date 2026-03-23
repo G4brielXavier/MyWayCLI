@@ -32,33 +32,32 @@ impl Fiman {
         let mw_path = doc_path.join("myway_projects.tql");
         let graveyard_path = doc_path.join("graveyard_projects.tql");
 
-        Ok(Self { 
+        let mut fiman = Self { 
             doc_path, 
             mw_path, 
             graveyard_path, 
-            teq_encrypt: TequelEncrypt::new().with_iteration(100), 
+            teq_encrypt: TequelEncrypt::new(), 
             user_private_key: "".to_string()
-        })
+        };
+
+        fiman.user_private_key = fiman.get_machine_seed();
+
+        Ok(fiman)
     
     }
 
 
-    fn helper_setup_file_encrypt(&mut self, content: String, path: &PathBuf) -> Result<(), MyWayError> {
+    fn helper_setup_file_encrypt(&mut self, content: &[u8], path: &PathBuf) -> Result<(), MyWayError> {
         
-        let encrypted = self.teq_encrypt.encrypt(content.as_bytes(), &self.user_private_key).map_err(|e| {
-            MyWayError::IoError(Error::new(
-                ErrorKind::Other,
-                format!("{}", e)
-            ))
-        })?;
+        let encrypted = self.teq_encrypt
+            .encrypt(content, &self.user_private_key)
+            .map_err(|e| MyWayError::IoError(Error::new(ErrorKind::Other, format!("{}", e))))?;
 
-        let json_data = serde_json::to_string_pretty(&encrypted).map_err(|e| {
+        let json_data = serde_json::to_string(&encrypted).map_err(|e| {
             MyWayError::IoError(e.into())
         })?;
 
-        fs::write(&path, json_data).map_err(|e| {
-            MyWayError::IoError(e)
-        })?;
+        fs::write(&path, json_data).map_err(MyWayError::IoError)?;
 
         Ok(())
 
@@ -68,7 +67,6 @@ impl Fiman {
     pub fn setup(&mut self) -> Result<(), MyWayError> {
             
         fs::create_dir_all(&self.doc_path).map_err(|e| { MyWayError::IoError(e) })?;
-        self.user_private_key = self.get_machine_seed();
               
         let mut old_dir = data_local_dir().unwrap();
         old_dir.push("MyWayCli");
@@ -79,25 +77,25 @@ impl Fiman {
         if old_path_projects.exists() {
             println!("Migrating your projects to a new secure vault...");
 
-            let content = fs::read_to_string(&old_path_projects).map_err(MyWayError::IoError)?;
-            self.helper_setup_file_encrypt(content, &self.mw_path.clone())?;
+            let content = fs::read(&old_path_projects).map_err(MyWayError::IoError)?;
+            self.helper_setup_file_encrypt(&content, &self.mw_path.clone())?;
             fs::remove_file(old_path_projects).ok();
         }
 
         if old_path_graveyard.exists() {
             println!("Migrating your graveyard to a new secure vault...");
 
-            let content = fs::read_to_string(&old_path_graveyard).map_err(MyWayError::IoError)?;
-            self.helper_setup_file_encrypt(content, &self.graveyard_path.clone())?;
+            let content = fs::read(&old_path_graveyard).map_err(MyWayError::IoError)?;
+            self.helper_setup_file_encrypt(&content, &self.graveyard_path.clone())?;
             fs::remove_file(old_path_graveyard).ok();
         }
 
         if !self.mw_path.exists() {
-            self.helper_setup_file_encrypt("[]".to_string(), &self.mw_path.clone())?;
+            self.helper_setup_file_encrypt("[]".as_bytes(), &self.mw_path.clone())?;
         }
 
         if !self.graveyard_path.exists() {
-            self.helper_setup_file_encrypt("[]".to_string(), &self.graveyard_path.clone())?;
+            self.helper_setup_file_encrypt("[]".as_bytes(), &self.graveyard_path.clone())?;
         }
 
         Ok(())
@@ -106,38 +104,24 @@ impl Fiman {
 
     pub fn write(&mut self, data: &ProjectList, path: &PathBuf) -> Result<(), MyWayError> {
 
-        let data = serde_json::to_string_pretty(data).map_err(|e| {
-            MyWayError::IoError(e.into())
-        })?;
-
-        self.helper_setup_file_encrypt(data, path)?;
+        let data = serde_json::to_vec(data).map_err(|e| MyWayError::IoError(e.into()))?;
+    
+        self.helper_setup_file_encrypt(&data, path)?;
 
         Ok(())
     }
 
     pub fn read(&mut self, path: &PathBuf) -> Result<ProjectList, MyWayError> {
 
-        let content = fs::read_to_string(&path).map_err(|e| {
-            MyWayError::IoError(e)
+        let content = fs::read_to_string(&path).map_err(MyWayError::IoError)?;
+        let enc_struct: TequelEncryption = serde_json::from_str(&content).map_err(|e| MyWayError::IoError(e.into()))?;
+
+        let decrypted = self.teq_encrypt.decrypt(&enc_struct, &self.user_private_key).map_err(|e| {
+            MyWayError::IoError(Error::new(ErrorKind::Other, format!("TEQUEL FAILED: {}", e)))
         })?;
 
-        let encryption_struct = serde_json::from_str::<TequelEncryption>(&content).map_err(|e| {
-            MyWayError::IoError(e.into())
-        })?;
-
-
-        let decrypted = self.teq_encrypt.decrypt(&encryption_struct, &self.user_private_key).map_err(|e| {
-            MyWayError::IoError(Error::new(
-                ErrorKind::Other,
-                format!("{}", e)
-            ))
-        })?;
-
-        let result: ProjectList = serde_json::from_str::<ProjectList>(&decrypted).map_err(|e| {
-            MyWayError::IoError(Error::new(
-                ErrorKind::Other,
-                format!("{}", e)
-            ))
+        let result: ProjectList = serde_json::from_str(&decrypted).map_err(|e| {
+            MyWayError::IoError(Error::new(ErrorKind::Other, format!("SERDE FAILED: {}", e)))
         })?;
 
         Ok(result)
@@ -161,7 +145,7 @@ impl Fiman {
             .or_else(|_| env::var("HOSTNAME"))
             .unwrap_or_else(|_| "unknown_machine".to_string());
 
-        format!("{}-{}", user, computer)
+        format!("{}-{}", user, computer).trim().to_lowercase()
     }
 
 }
