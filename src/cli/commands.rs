@@ -107,10 +107,8 @@ pub enum Commands {
     },
 
 
-
     /// List all stacks that is used in all project
     Stacks,
-
 
 
 
@@ -134,7 +132,8 @@ pub enum Commands {
 
     },
 
-    // Revive a specific project from Graveyard with your uuid
+
+    /// Revive a specific project from Graveyard with your uuid or name
     Reviv {
         
         #[arg(short, long)]
@@ -145,6 +144,7 @@ pub enum Commands {
 
     },
     
+
     /// Ordenate your projects, putting on first or last and swapping two projects
     Ord {
 
@@ -164,5 +164,30 @@ pub enum Commands {
         swap: Option<String>
 
     },
+
+
+    Trace {
+
+        #[arg(short, long)]
+        uuid: Option<String>,
+
+        #[arg(short, long)]
+        name: Option<String>,
+
+        #[arg(short, long)]
+        list: bool,
+
+        #[arg(short, long)]
+        add: bool,
+
+        #[arg(short, long)]
+        remove: Option<usize>
+
+    },
+
+
+    Stats {
+
+    }
 
 }

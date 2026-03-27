@@ -1,6 +1,6 @@
 [package]
 name = "myway-cli"
-version = "0.3.5"
+version = "0.4.0"
 authors = ["Gabriel Xavier <dotxavket@gmail.com>"]
 edition = "2021"
 description = "A minimalist project manager CLI to organize your ideas and stacks."
@@ -21,7 +21,7 @@ chrono = "0.4"
 regex = "1"
 dirs = "6.0"
 reqwest = { version = "0.11", features = ["json", "blocking"] }
-semver = "1.0" # Para comparar versões de forma inteligente
+semver = "1.0"
 memmap2 = "0.9"
 
 [[bin]]

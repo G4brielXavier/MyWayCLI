@@ -9,7 +9,7 @@ use log::log::{ Log, LogF };
 
 use cli::matches::match_cli;
 
-use crate::core::{filemanager::Fiman, project::{GraveyardList, ProjectList}};
+use crate::core::{errors::MyWayError, filemanager::{Fiman, ReturnReadType}};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     
@@ -21,9 +21,20 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cli: Args = Args::parse(); // cli
 
     // read myway_projects.json and convert to Vec<Project>
-    let mut data: ProjectList = fileman.read(&fileman.mw_path.clone())?;
-    let mut data_graveyard: GraveyardList = fileman.read(&fileman.graveyard_path.clone())?;
+    let mut data = match fileman.read(&fileman.mw_path.clone())? {
+        ReturnReadType::GenericList(p) => p,
+        _ => return Err(MyWayError::InvalidInput("File projects corrupted".to_string()).into())
+    };
 
+    let mut data_graveyard = match fileman.read(&fileman.graveyard_path.clone())? {
+        ReturnReadType::GenericList(p) => p,
+        _ => return Err(MyWayError::InvalidInput("File graveyard corrupted".to_string()).into())
+    };
+
+    let mut user_data = match fileman.read(&fileman.user_path.clone())? {
+        ReturnReadType::User(p) => p,
+        _ => return Err(MyWayError::InvalidInput("File user corrupted".to_string()).into())
+    };
 
     // initiate the match to analize command delivered
     match_cli(
@@ -31,7 +42,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         log, 
         &mut fileman, 
         &mut data, 
-        &mut data_graveyard
+        &mut data_graveyard,
+        &mut user_data
     )?;
 
     Ok(())

@@ -1,3 +1,6 @@
+
+
+
 #[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq)]
 pub struct Project {
     
@@ -13,14 +16,40 @@ pub struct Project {
     pub time_created: String, // project time created
     pub your_think: String, // what the creator think about this project
 
-    pub is_finish: bool
+    pub is_finish: bool,
+
+
+    #[serde(default)]
+    pub trace: Vec<String>,
+
 
 }
 
 
 
-pub type GraveyardList = Vec<Project>;
-pub type ProjectList = Vec<Project>;
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub struct User {
+
+    #[serde(default)]
+    pub projects_created: u64,
+    
+    #[serde(default)]
+    pub projects_finish: u64,
+
+    #[serde(default)]
+    pub projects_killed: u64,
+    
+    #[serde(default)]
+    pub projects_revived: u64,
+
+    #[serde(default)]
+    pub projects_giveup: u64,
+
+}
+
+
+
+pub type GenericList = Vec<Project>;
 pub type StackList = Vec<String>;
 pub type VersionList = Vec<String>;
 

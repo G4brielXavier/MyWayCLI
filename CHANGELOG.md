@@ -84,3 +84,21 @@
 
 - New Parameter to `mw hey`:
   - `--update`: Verify if `myway` is updated
+
+
+## myway-cli v0.4.0
+
+### Features
+
+- **New Command**: `mw trace` to create notes about changes in your projects
+  - `--list`: Show all notes of a specific project
+  - `--add`: Add a new note to a specific project
+  - `--remove`: Remove a specific note from a specific project
+  
+- **New Command**: `mw stats` to show informations about your MyWay
+
+
+### Improvements
+  - =>80 characters to Description
+  - Fixes in UX
+  - Bugs fixed
