@@ -1305,9 +1305,9 @@ dependencies = [
 
 [[package]]
 name = "tequel-rs"
-version = "0.7.5"
+version = "0.7.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a262e74cf9ca234e95ec4b541a056eeb8c0ca2fed67e15c07e8339fb1393b5cb"
+checksum = "7b128717be772abfcd72bcfa9df0eb559357ffde24f72b70d6126bc0fdac56a5"
 dependencies = [
  "getrandom 0.2.17",
  "hex",
