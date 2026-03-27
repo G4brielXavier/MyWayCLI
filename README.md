@@ -16,7 +16,7 @@
   - [🛠️ Commands \& Usage](#️-commands--usage)
     - [💡 Quick Examples](#-quick-examples)
   - [📂 Data Storage](#-data-storage)
-  - [�Installation](#installation)
+  - [💻Installation](#installation)
   - [📄 License](#-license)
 
 
@@ -42,6 +42,8 @@ Created by **Gabriel Xavier**, My Way was born from the need to organize an "ove
 | `yard` | Manage your archives | `--add`, `--list`, `--exject` |
 | `reviv` | Remove a specific archivaded project | `--uuid` or `--name` |
 | `finish` | Celebrate completion! | `--uuid` or `--name` |
+| `trace` | Manage notes in each project created | `--uuid`, `--name`, `--add`, `--list` |
+| `stats` | Show informations about MyWay's user | `no` |
 
 ### 💡 Quick Examples
 
