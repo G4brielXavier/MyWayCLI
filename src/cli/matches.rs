@@ -112,10 +112,6 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Gen
             }
 
             let proj_description: String = log.quest_mandatory("description", "It's my project");
-
-            if proj_description.len() > 80 {
-                return Err(MyWayError::StringLengthLimitExceeded("description: <=80 limit length".to_string()))
-            }
             
             log.hey("");
             log.hey_mw(&format!("{} Use \"SemVer\" as '0.1.0'. No spaces.", "Recommended:".yellow()));
@@ -229,10 +225,6 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Gen
                     // }
     
                     let proj_description: String = log.quest_mandatory("description", &proj.description);
-    
-                    if proj_description.len() > 80 {
-                        return Err(MyWayError::StringLengthLimitExceeded("description: <=80 limit length".to_string()))
-                    }
 
                     log.hey("");
                     log.hey_mw(&format!("{}", "Stack is what you are using to creating your project.".dimmed()));
