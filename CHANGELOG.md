@@ -1,104 +1,14 @@
-## myway-cli v0.1.0 Stable:
+## MyWay v1.0.0 Stable
 
-- Add features 
-    - Separate two commands to finish a project.
-        - `myway finish` to mark a project as finish.
-        - `myway status` to write (custom) status of project (as "stable", "deprecated").
+### Informations
 
-    - Add `myway version`:
-        - `--list`: show all versions of a specific project.
-        - `--add`: add a new version to a specific project.
+Release Date: 2026-04-18 
 
-    - Add `myway graveyard` to visit projects "killed" (just a list).
-        - `--kill`: Kill a project, remove from Way and add to graveyard.
-        - `--list`: List all projects in graveyard.
+### UX
 
-    - Add "myway way --complex" to see more details about project.
+- Improvements in logs
+- Colors enhanced
 
-- Improvements
-    - If project's name has spaces, replace to '-' ("My Project" -> "My-Project") [DONE!]
-    - Logs improved
-    - 'myway giveup', 'myway way' improved
-    - Improvements in filters 
-    - "MyWayError" added to improve UX and errors logs
+### Fixes
 
-
-## myway-cli v0.1.6:
-
-  - Changed prefix `myway` to `mw`
-
-  - Improvements
-      - README fixes
-      - Changed `create` to `add`
-      - Change `(F)` and `Status: new` to `(W : new)`
-
-
-## myway-cli v0.2.0:
-
-- New Feature:
-    - Added 3 new parameters to `mw way`:
-        - `--status <STATUS>`: filter by specific status
-        - `--finish`: show only projects that is `F`
-        - `--working`: show only projects that is `W` 
-
-- New Command - `mw ord`: to ordenate projects on WAY
-    - `--first`: Put a project as first
-    - `--last`: Put a project as last
-    - `--swap`: Swap two projects
-
-- New Command - `mw reviv`: to revive a specific project from graveyard
-
-
-- Improvements
-    - Now was defined a limit of characters
-        - `project_name`: <=12
-        - `status`: <=8
-        - `version`: <=8
-        - `description`: <=24
-
-    - No spaces to `status` and `version`
-    - UX CLI Experience improved
-
-
-## myway-cli v0.3.0:
-
-- Security: The MyWay's internal file are encrypted by **Tequel**
-
-- Improvements
-  - UX Colors improved (`colored`)
-  - `mw giveup` visual improved
-
-## myway-cli v0.3.1
-
-- Change Limits:
-  - Description: <=35
-  - Project's Name: <=20
-
-## myway-cli v0.3.3
-
-- Added Latest Release Verifier (`crates.io` API)
-- Some improvements
-- Bugs fixes
-
-## myway-cli v0.3.4
-
-- New Parameter to `mw hey`:
-  - `--update`: Verify if `myway` is updated
-
-
-## myway-cli v0.4.0
-
-### Features
-
-- **New Command**: `mw trace` to create notes about changes in your projects
-  - `--list`: Show all notes of a specific project
-  - `--add`: Add a new note to a specific project
-  - `--remove`: Remove a specific note from a specific project
-  
-- **New Command**: `mw stats` to show informations about your MyWay
-
-
-### Improvements
-  - =>80 characters to Description
-  - Fixes in UX
-  - Bugs fixed
+- Bugs in local storage fixed

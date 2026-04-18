@@ -15,7 +15,7 @@ use crate::core::filemanager::ReturnReadType;
 // CRATES
 use chrono::{ Local };
 use colored::Colorize;
-use tequel_rs::rng::TequelRng;
+use tequel::rng::TequelRng;
 
 use semver::Version;
 use reqwest::header::USER_AGENT;
@@ -306,12 +306,12 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Gen
                         println!("");
 
                         let is_finished = if project.is_finish {
-                            "F"
+                            "fi"
                         } else {
-                            "W"
+                            "wo"
                         };
 
-                        log.hey_mw(&format!("({} : {}) {} {} {}", is_finished.bold().yellow(), project.status.yellow().bold(), project.uuid.italic(), project.name.bold(), format!("[{}]", project.versions.last().expect("")).italic()));
+                        log.hey_mw(&format!("({} : {}) {} {} {}", is_finished.yellow(), project.status.yellow(), project.uuid.italic(), project.name.bold(), format!("{}", project.versions.last().expect(""))));
 
                         if !*oneline {
                             if *complex { log.hey_project(project, true); } 
@@ -336,12 +336,12 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Gen
                         println!("");
 
                         let is_finished = if project.is_finish {
-                            "F"
+                            "fi"
                         } else {
-                            "W"
+                            "wo"
                         };
 
-                        log.hey_mw(&format!("({} : {}) {} {} {}", is_finished.bold().yellow(), project.status.yellow().bold(), project.uuid.italic(), project.name.bold(), format!("[{}]", project.versions.last().expect("")).italic()));
+                        log.hey_mw(&format!("({} : {}) {} {} {}", is_finished.yellow(), project.status.yellow(), project.uuid.italic(), project.name.bold(), format!("{}", project.versions.last().expect(""))));
 
                         if !*oneline {
                             if *complex { log.hey_project(project, true); } 
@@ -388,12 +388,12 @@ pub fn match_cli(command: &Commands, log: Log, files: &mut Fiman, data: &mut Gen
                 for project in project_way.iter() {
 
                     let is_finished = if project.is_finish {
-                        "F"
+                        "fi"
                     } else {
-                        "W"
+                        "wo"
                     };
 
-                    log.hey_mw(&format!("({} : {}) {} {} {}", is_finished.bold().yellow(), project.status.yellow().bold(), project.uuid.italic(), project.name.bold(), format!("[{}]", project.versions.last().expect("")).italic()));
+                    log.hey_mw(&format!("({} : {}) {} {} {}", is_finished.yellow(), project.status.yellow(), project.uuid.italic(), project.name.bold(), format!("{}", project.versions.last().expect(""))));
 
                     if !*oneline {
                         if *complex { log.hey_project(project, true); } 

@@ -3,7 +3,7 @@
 [![Crates.io](https://img.shields.io/crates/v/myway-cli.svg)](https://crates.io/crates/myway-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**A minimalist project manager for your ideas. Built with Rust for speed and mental clarity.**
+*A minimalist project manager for your projects. Built with Rust for speed and mental clarity.*
 
 ![banner](./assets/banner.png)
 
@@ -24,7 +24,8 @@
 
 Created by **Gabriel Xavier**, My Way was born from the need to organize an "over-mind" of projects. It's not just another CRUD; it's a curated space for your technical journey. 
 
-> *If you have a project, finish it. If you can't, own your choice and give up.*
+> *If you have a project, finish it. <br>
+> If you can't, make your choice and give up.*
 
 ---
 
@@ -47,7 +48,7 @@ Created by **Gabriel Xavier**, My Way was born from the need to organize an "ove
 
 ### 💡 Quick Examples
 
-```bash
+```ps
 # Adding a new project on WAY
 mw add
 

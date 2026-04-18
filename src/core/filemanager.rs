@@ -4,7 +4,7 @@ use std::path::PathBuf;
 use std::io::{Error, ErrorKind};
 
 use dirs::data_local_dir;
-use tequel_rs::encrypt::{ TequelEncryption, TequelEncrypt };
+use tequel::encrypt::{ TequelEncryption, TequelEncrypt };
 
 use crate::core::project::{ GenericList, User };
 use crate::core::errors::MyWayError;

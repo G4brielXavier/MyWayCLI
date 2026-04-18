@@ -7,6 +7,8 @@ use std::io;
 use crate::core::project::Project;
 use crate::core::project::view_mission;
 
+
+
 #[derive(Debug)]
 pub struct Log {}
 
@@ -32,15 +34,15 @@ impl LogF for Log {
     }
 
     fn hey_mw(&self, msg: &str) {
-        println!("{} {}", "[MW]".bright_purple(), msg.italic());
+        println!("{}  {}", "mw".purple(), msg.italic());
     }
 
     fn hey_project(&self, project: &Project, complex: bool) {
-        println!("\t{}", project.description.dimmed().italic());
-        println!("\tMission: \"{}\"", view_mission(&project.mission).italic().yellow());
+        println!("\t{}", format!("// {}", project.description).dimmed().italic());
+        println!("\tmission: {}", view_mission(&project.mission).italic().yellow());
         if complex {
-            println!("\tCreated at: {}", project.time_created.italic());
-            println!("\tStack(s):");
+            println!("\tcreated at: {}", project.time_created.italic());
+            println!("\tstack(s):");
             if project.stack.len() != 0 {
                 for i in project.stack.iter() {
                     println!("\t- {} ", i.bold())

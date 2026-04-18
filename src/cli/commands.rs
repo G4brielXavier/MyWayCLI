@@ -14,7 +14,7 @@ pub enum Commands {
     Add,
 
 
-    /// Show all existent projects on WAY, you can filter by stage (`F` & `W`) or status`
+    /// Show all existent projects on WAY, you can filter by stage (`fi` & `wo`) or status`
     Way {
 
         #[arg(short, long)]
@@ -53,7 +53,7 @@ pub enum Commands {
     },
 
 
-    /// Define a project as `F` (Finish)
+    /// Define a project as `fi` (Finish)
     Finish {
 
         #[arg(short, long)]
