@@ -3,9 +3,12 @@
 [![Crates.io](https://img.shields.io/crates/v/myway-cli.svg)](https://crates.io/crates/myway-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+![banner](./assets/banner.png)
+
+> This project is deprecated (ironically)
+
 *A minimalist project manager for your projects. Built with Rust for speed and mental clarity.*
 
-![banner](./assets/banner.png)
 
 
 ## Summary 
